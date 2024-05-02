@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Outlet } from 'react-router-dom'
 
 import './App.css'
 import reactLogo from './assets/react.svg'
@@ -9,6 +10,7 @@ function App() {
 
   return (
     <>
+      <Outlet />
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
