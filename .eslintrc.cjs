@@ -28,4 +28,9 @@ module.exports = {
      */
     'react/prop-types': [2, { ignore: ['className'] }],
   },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
 }
