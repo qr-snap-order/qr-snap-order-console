@@ -3,8 +3,10 @@ import {
   ApolloProvider,
   InMemoryCache,
   createHttpLink,
+  from,
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import { onError } from '@apollo/client/link/error'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
@@ -29,8 +31,23 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  /**
+   * TODO:: エラー時の共通仕様を検討して実装する
+   *        - 認証エラーはログイン画面にリダイレクトする
+   *        - システムエラーはトーストを表示する
+   */
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    )
+  if (networkError) console.error(`[Network error]: ${networkError}`)
+})
+
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: from([errorLink, authLink, httpLink]),
   cache: new InMemoryCache(),
 })
 
