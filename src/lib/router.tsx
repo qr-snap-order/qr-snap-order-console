@@ -1,7 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
 
 import App from '@/App.tsx'
+import EmployeeList from '@/pages/EmployeeList'
 import Login from '@/pages/Login'
+import ShopList from '@/pages/ShopList'
+import UserList from '@/pages/UserList'
 
 export const router = createBrowserRouter([
   {
@@ -10,15 +13,15 @@ export const router = createBrowserRouter([
     children: [
       {
         path: 'users',
-        element: <div>users</div>, // TODO:: create a users page
+        element: <UserList />,
       },
       {
         path: 'shops',
-        element: <div>shops</div>, // TODO:: create a shops page
+        element: <ShopList />,
       },
       {
         path: 'employees',
-        element: <div>shops</div>, // TODO:: create a shops page
+        element: <EmployeeList />,
       },
     ],
   },
