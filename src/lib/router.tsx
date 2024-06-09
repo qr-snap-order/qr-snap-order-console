@@ -1,10 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom'
 
 import App from '@/App.tsx'
-import EmployeeList from '@/pages/EmployeeList'
 import Login from '@/pages/Login'
-import ShopList from '@/pages/ShopList'
-import UserList from '@/pages/UserList'
+import Employee from '@/pages/employee/Employee'
+import EmployeeList from '@/pages/employee/EmployeeList'
+import Shop from '@/pages/shop/Shop'
+import ShopList from '@/pages/shop/ShopList'
+import User from '@/pages/user/User'
+import UserList from '@/pages/user/UserList'
 
 export const router = createBrowserRouter([
   {
@@ -16,12 +19,24 @@ export const router = createBrowserRouter([
         element: <UserList />,
       },
       {
+        path: 'users/:id',
+        element: <User />,
+      },
+      {
         path: 'shops',
         element: <ShopList />,
       },
       {
+        path: 'shops/:id',
+        element: <Shop />,
+      },
+      {
         path: 'employees',
         element: <EmployeeList />,
+      },
+      {
+        path: 'employees/:id',
+        element: <Employee />,
       },
     ],
   },

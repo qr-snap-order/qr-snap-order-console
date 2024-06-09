@@ -1,4 +1,6 @@
-import EmployeeNew from '@/components/organisms/employee/EmployeeNew'
+import { Link } from 'react-router-dom'
+
+import ShopNew from '@/components/organisms/shop/ShopNew'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -10,17 +12,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { useEmployees } from '@/hooks/employee/useEmployees'
+import { useShops } from '@/hooks/shop/useShops'
 import { useFilter } from '@/hooks/useFilter'
 
-export default function EmployeeList() {
-  const { data } = useEmployees()
+export default function ShopList() {
+  const { data } = useShops()
 
   const {
     filter,
     setFilter,
-    result: employees,
-  } = useFilter(data.employees, ['id', 'name'])
+    result: shops,
+  } = useFilter(data.shops, ['id', 'name'])
 
   return (
     <div className="flex flex-col gap-4">
@@ -35,7 +37,7 @@ export default function EmployeeList() {
             <Button>New</Button>
           </DialogTrigger>
           <DialogContent>
-            <EmployeeNew />
+            <ShopNew />
           </DialogContent>
         </Dialog>
       </div>
@@ -48,11 +50,15 @@ export default function EmployeeList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {employees.map((employee) => (
-            <TableRow key={employee.id}>
-              <TableCell>{employee.id}</TableCell>
-              <TableCell>{employee.name}</TableCell>
-              <TableCell></TableCell>
+          {shops.map((shop) => (
+            <TableRow key={shop.id}>
+              <TableCell>{shop.id}</TableCell>
+              <TableCell>{shop.name}</TableCell>
+              <TableCell>
+                <Link to={`/shops/${shop.id}`}>
+                  <Button variant="link">Show</Button>
+                </Link>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
