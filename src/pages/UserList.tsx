@@ -1,5 +1,14 @@
 import { gql, useSuspenseQuery } from '@apollo/client'
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+
 const GET_USERS = gql`
   query {
     users {
@@ -20,9 +29,24 @@ export default function UserList() {
   const { data } = useSuspenseQuery<UsersData>(GET_USERS)
   return (
     <div>
-      {data.users.map((user) => (
-        <div key={user.id}>{user.name}</div>
-      ))}
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Id</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Action</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.users.map((user) => (
+            <TableRow key={user.id}>
+              <TableCell>{user.id}</TableCell>
+              <TableCell>{user.name}</TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   )
 }
