@@ -1,5 +1,6 @@
-import { gql, useSuspenseQuery } from '@apollo/client'
-
+import UserNew from '@/components/organisms/user/UserNew'
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import {
   Table,
@@ -10,25 +11,10 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { useFilter } from '@/hooks/useFilter'
-
-const GET_USERS = gql`
-  query {
-    users {
-      id
-      name
-    }
-  }
-`
-
-type UsersData = {
-  users: {
-    id: string
-    name: string
-  }[]
-}
+import { useUsers } from '@/hooks/user/useUsers'
 
 export default function UserList() {
-  const { data } = useSuspenseQuery<UsersData>(GET_USERS)
+  const { data } = useUsers()
 
   const {
     filter,
@@ -37,12 +23,22 @@ export default function UserList() {
   } = useFilter(data.users, ['id', 'name'])
 
   return (
-    <div>
-      <Input
-        placeholder="Filter by id, name"
-        value={filter}
-        onChange={(e) => setFilter(e.target.value)}
-      />
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-2">
+        <Input
+          placeholder="Filter by id, name"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+        />
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>New</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <UserNew />
+          </DialogContent>
+        </Dialog>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>

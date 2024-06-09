@@ -9,6 +9,7 @@ export function useFilter<T>(data: T[], columns: (keyof T)[]) {
   const [filter, setFilter] = useState('')
 
   const keywords = useMemo(
+    // eslint-disable-next-line no-irregular-whitespace
     () => filter.split(/[\s　]+/).filter((keyword) => keyword !== ''),
     [filter]
   )
