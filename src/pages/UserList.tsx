@@ -1,5 +1,6 @@
 import { gql, useSuspenseQuery } from '@apollo/client'
 
+import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -8,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { useFilter } from '@/hooks/useFilter'
 
 const GET_USERS = gql`
   query {
@@ -27,8 +29,20 @@ type UsersData = {
 
 export default function UserList() {
   const { data } = useSuspenseQuery<UsersData>(GET_USERS)
+
+  const {
+    filter,
+    setFilter,
+    result: users,
+  } = useFilter(data.users, ['id', 'name'])
+
   return (
     <div>
+      <Input
+        placeholder="Filter by id, name"
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+      />
       <Table>
         <TableHeader>
           <TableRow>
@@ -38,7 +52,7 @@ export default function UserList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.users.map((user) => (
+          {users.map((user) => (
             <TableRow key={user.id}>
               <TableCell>{user.id}</TableCell>
               <TableCell>{user.name}</TableCell>
