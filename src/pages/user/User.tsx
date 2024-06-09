@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
 
+import { BreadcrumbNav } from '@/components/breadcrubnav'
 import { Button } from '@/components/ui/button'
 import { useUser } from '@/hooks/user/useUser'
 
@@ -9,8 +10,16 @@ export default function User() {
 
   if (!data.user) return <div>Not Found</div>
 
+  const breadcrumb = [
+    { label: 'Users', href: '/users' },
+    { label: data.user.name },
+  ]
+
   return (
-    <div>
+    <div className="flex flex-col gap-4">
+      <div className="mb-4">
+        <BreadcrumbNav links={breadcrumb} />
+      </div>
       <div className="flex justify-end gap-2">
         <Button>Edit</Button>
         <Button>Delete</Button>

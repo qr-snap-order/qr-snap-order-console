@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 
+import { BreadcrumbNav } from '@/components/breadcrubnav'
 import EmployeeNew from '@/components/organisms/employee/EmployeeNew'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
@@ -24,8 +25,13 @@ export default function EmployeeList() {
     result: employees,
   } = useFilter(data.employees, ['id', 'name'])
 
+  const breadcrumb = [{ label: 'Employees' }]
+
   return (
     <div className="flex flex-col gap-4">
+      <div className="mb-4">
+        <BreadcrumbNav links={breadcrumb} />
+      </div>
       <div className="flex gap-2">
         <Input
           placeholder="Filter by id, name"
