@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react'
 
-function isMatchKeyword(word: string, keyword: string) {
-  // TODO:: カタカナとひらがなを区別しないで検索できるようにする
-  return word.toLowerCase().includes(keyword.toLowerCase())
+function normalize(word: string) {
+  // TODO:: 全角カタカナ、半角カタカナをひらがなに変換
+  // TODO:: 全角数値を半角数値に変換
+  return word.toLowerCase()
 }
 
 export function useFilter<T>(data: T[], columns: (keyof T)[]) {
@@ -23,7 +24,7 @@ export function useFilter<T>(data: T[], columns: (keyof T)[]) {
               columns.some(
                 (column) =>
                   typeof item[column] === 'string' &&
-                  isMatchKeyword(item[column], keyword)
+                  normalize(item[column]).includes(normalize(keyword)) // あいまいな検索を実現するために文字列を正規化している
               )
             )
           ),
