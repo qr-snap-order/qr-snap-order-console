@@ -4,6 +4,7 @@ import App from '@/App.tsx'
 import Login from '@/pages/Login'
 import Employee from '@/pages/employee/Employee'
 import EmployeeList from '@/pages/employee/EmployeeList'
+import Menu from '@/pages/menu/Menu'
 import Shop from '@/pages/shop/Shop'
 import ShopList from '@/pages/shop/ShopList'
 import User from '@/pages/user/User'
@@ -37,6 +38,10 @@ export const router = createBrowserRouter([
       {
         path: 'employees/:id',
         element: <Employee />,
+      },
+      {
+        path: 'menu',
+        element: <Menu />,
       },
     ],
   },

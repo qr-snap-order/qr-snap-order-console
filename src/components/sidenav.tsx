@@ -1,4 +1,4 @@
-import { Home, Mountain, Store, User, Users } from 'lucide-react'
+import { Home, Mountain, SquareM, Store, User, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 /**
  * v0 by Vercel.
@@ -28,6 +28,11 @@ const navItems = [
     name: 'Employees',
     icon: Users,
     to: '/employees',
+  },
+  {
+    name: 'Menu',
+    icon: SquareM,
+    to: '/menu',
   },
 ]
 
