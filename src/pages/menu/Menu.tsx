@@ -1,5 +1,17 @@
+import {
+  DndContext,
+  DragEndEvent,
+  MouseSensor,
+  TouchSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
+import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FilePenLine, Plus, Trash2 } from 'lucide-react'
+import { FilePenLine, Grip, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { type UseFormReturn, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -17,6 +29,12 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { useMenus } from '@/hooks/menu/useMenus'
 
 const formSchema = z.object({
@@ -62,11 +80,11 @@ export default function Menu() {
   // TODO:: キャンセルボタンで編集から抜けるとタブが選択されていない状態になる。よい解決方法が分からないので再レンダリングさせることで対応。
   const [refreshTab, setRefreshTab] = useState(0)
 
-  function onEdit() {
+  function handleClickEdit() {
     setIsEditing(true)
   }
 
-  function onCancel() {
+  function handleClickCancel() {
     form.reset()
     setIsEditing(false)
     setRefreshTab((i) => i + 1)
@@ -88,7 +106,7 @@ export default function Menu() {
             <div className="flex justify-end gap-2">
               {isEditing ? (
                 <>
-                  <Button type="button" onClick={onCancel}>
+                  <Button type="button" onClick={handleClickCancel}>
                     Cancel
                   </Button>
                   <Button disabled={!form.formState.isDirty} type="submit">
@@ -97,7 +115,7 @@ export default function Menu() {
                 </>
               ) : (
                 <>
-                  <Button type="button" onClick={onEdit}>
+                  <Button type="button" onClick={handleClickEdit}>
                     Edit
                   </Button>
                 </>
@@ -147,14 +165,26 @@ function MenuSection({ form, path, isEditing }: MenuSectionProp) {
   const {
     fields: menuItems,
     append,
-    // update,
+    move,
     remove,
   } = useFieldArray({
     control: form.control,
     name: `${path}.menuItems`,
   })
 
-  function appendNewItem() {
+  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event
+    if (active.id !== over?.id) {
+      move(
+        menuItems.findIndex((menuItem) => menuItem.id === active.id),
+        menuItems.findIndex((menuItem) => menuItem.id === over!.id)
+      )
+    }
+  }
+
+  function handleClickNewItem() {
     append({
       id: crypto.randomUUID(),
       name: '',
@@ -162,23 +192,44 @@ function MenuSection({ form, path, isEditing }: MenuSectionProp) {
     })
   }
 
+  function handleClickRemoveItem(idx: number) {
+    remove(idx)
+  }
+
   return (
-    <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-      {menuItems.map((menuItem, idx) => (
-        <MenuItem
-          key={menuItem.id}
-          form={form}
-          isEditing={isEditing}
-          path={`${path}.menuItems.${idx}`}
-          onRemove={() => remove(idx)}
-        />
-      ))}
-      {isEditing && (
-        <Button className="h-[440px]" variant="link" onClick={appendNewItem}>
-          <Plus size={50} />
-        </Button>
-      )}
-    </div>
+    <DndContext
+      collisionDetection={closestCenter}
+      sensors={sensors}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext
+        disabled={!isEditing}
+        items={menuItems}
+        strategy={rectSortingStrategy}
+      >
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          {menuItems.map((menuItem, idx) => (
+            <MenuItem
+              key={menuItem.id}
+              id={menuItem.id}
+              form={form}
+              isEditing={isEditing}
+              path={`${path}.menuItems.${idx}`}
+              onRemove={() => handleClickRemoveItem(idx)}
+            />
+          ))}
+          {isEditing && (
+            <Button
+              className="h-[440px]"
+              variant="link"
+              onClick={handleClickNewItem}
+            >
+              <Plus size={50} />
+            </Button>
+          )}
+        </div>
+      </SortableContext>
+    </DndContext>
   )
 }
 
@@ -187,10 +238,47 @@ type MenuItemProp = {
   form: UseFormReturn<z.infer<typeof formSchema>>
   onRemove: () => void
   isEditing: boolean
+  id: string
 }
-function MenuItem({ form, path, onRemove, isEditing }: MenuItemProp) {
+function MenuItem({ form, path, onRemove, isEditing, id }: MenuItemProp) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition: transition || undefined,
+  }
+
   return (
-    <div className="flex flex-col gap-y-2">
+    <div
+      ref={setNodeRef}
+      className={
+        'relative flex flex-col gap-y-2 bg-white ' +
+        (isDragging ? 'opacity-25' : '')
+      }
+      style={style}
+      {...attributes}
+    >
+      {isEditing && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Grip className="absolute right-1 top-1 z-10" {...listeners} />
+            </TooltipTrigger>
+            <TooltipContent className="bg-primary">
+              <p className="text-white">
+                Drag and drop to change the order and sections.
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
       <AspectRatio className="bg-muted" ratio={4 / 3}>
         <img
           className="size-full object-cover"
@@ -198,7 +286,6 @@ function MenuItem({ form, path, onRemove, isEditing }: MenuItemProp) {
           src="http://localhost:5173/noimage.png"
         />
       </AspectRatio>
-
       <FormField
         control={form.control}
         name={`${path}.name`}
@@ -232,11 +319,10 @@ function MenuItem({ form, path, onRemove, isEditing }: MenuItemProp) {
           </FormItem>
         )}
       />
-
       <div className="flex justify-end gap-2">
         {isEditing && (
-          <Button variant="link">
-            <Trash2 onClick={onRemove} />
+          <Button type="button" variant="link" onClick={onRemove}>
+            <Trash2 />
           </Button>
         )}
       </div>
