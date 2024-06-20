@@ -13,7 +13,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FilePenLine, Grip, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
-import { type UseFormReturn, useFieldArray, useForm } from 'react-hook-form'
+import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
 import { z } from 'zod'
 
 import { BreadcrumbNav } from '@/components/breadcrubnav'
@@ -141,7 +141,6 @@ export default function Menu() {
                 {menuSections.map((menuSection, idx) => (
                   <TabsContent key={menuSection.id} value={menuSection.id}>
                     <MenuSection
-                      form={form}
                       isEditing={isEditing}
                       path={`menuSections.${idx}`}
                     />
@@ -158,17 +157,18 @@ export default function Menu() {
 
 type MenuSectionProp = {
   path: `menuSections.${number}`
-  form: UseFormReturn<z.infer<typeof formSchema>>
   isEditing: boolean
 }
-function MenuSection({ form, path, isEditing }: MenuSectionProp) {
+function MenuSection({ path, isEditing }: MenuSectionProp) {
+  const { control } = useFormContext<z.infer<typeof formSchema>>()
+
   const {
     fields: menuItems,
     append,
     move,
     remove,
   } = useFieldArray({
-    control: form.control,
+    control,
     name: `${path}.menuItems`,
   })
 
@@ -212,20 +212,17 @@ function MenuSection({ form, path, isEditing }: MenuSectionProp) {
             <MenuItem
               key={menuItem.id}
               id={menuItem.id}
-              form={form}
               isEditing={isEditing}
               path={`${path}.menuItems.${idx}`}
               onRemove={() => handleClickRemoveItem(idx)}
             />
           ))}
           {isEditing && (
-            <Button
-              className="h-[440px]"
-              variant="link"
-              onClick={handleClickNewItem}
-            >
-              <Plus size={50} />
-            </Button>
+            <div className="flex h-auto min-h-[400px] items-center justify-center">
+              <Button type="button" variant="link" onClick={handleClickNewItem}>
+                <Plus size={50} />
+              </Button>
+            </div>
           )}
         </div>
       </SortableContext>
@@ -235,12 +232,13 @@ function MenuSection({ form, path, isEditing }: MenuSectionProp) {
 
 type MenuItemProp = {
   path: `menuSections.${number}.menuItems.${number}`
-  form: UseFormReturn<z.infer<typeof formSchema>>
   onRemove: () => void
   isEditing: boolean
   id: string
 }
-function MenuItem({ form, path, onRemove, isEditing, id }: MenuItemProp) {
+function MenuItem({ path, onRemove, isEditing, id }: MenuItemProp) {
+  const { control } = useFormContext<z.infer<typeof formSchema>>()
+
   const {
     attributes,
     listeners,
@@ -269,7 +267,7 @@ function MenuItem({ form, path, onRemove, isEditing, id }: MenuItemProp) {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Grip className="absolute right-1 top-1 z-10" {...listeners} />
+              <Grip className="absolute left-1 top-1 z-10" {...listeners} />
             </TooltipTrigger>
             <TooltipContent className="bg-primary">
               <p className="text-white">
@@ -287,7 +285,7 @@ function MenuItem({ form, path, onRemove, isEditing, id }: MenuItemProp) {
         />
       </AspectRatio>
       <FormField
-        control={form.control}
+        control={control}
         name={`${path}.name`}
         render={({ field }) => (
           <FormItem>
@@ -300,7 +298,7 @@ function MenuItem({ form, path, onRemove, isEditing, id }: MenuItemProp) {
         )}
       />
       <FormField
-        control={form.control}
+        control={control}
         name={`${path}.price`}
         render={({ field }) => (
           <FormItem>
