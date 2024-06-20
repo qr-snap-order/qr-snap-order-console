@@ -28,8 +28,6 @@ type Props = {
 import { useFormContext } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Button } from '@/components/ui/button'
-
 export function MenuItem({ path, onRemove, isEditing, id }: Props) {
   const { control } = useFormContext<z.infer<typeof formSchema>>()
 
@@ -112,11 +110,7 @@ export function MenuItem({ path, onRemove, isEditing, id }: Props) {
         )}
       />
       <div className="flex justify-end gap-2">
-        {isEditing && (
-          <Button type="button" variant="link" onClick={onRemove}>
-            <Trash2 />
-          </Button>
-        )}
+        {isEditing && <Trash2 onClick={onRemove} />}
       </div>
     </div>
   )

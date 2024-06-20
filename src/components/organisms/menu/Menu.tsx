@@ -1,12 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FilePenLine } from 'lucide-react'
 import { useState } from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { MenuSection } from '@/components/organisms/menu/MenuSection'
+import MenuSectionListEdit from '@/components/organisms/menu/MenuSectionListEdit'
 import { formSchema } from '@/components/organisms/menu/formSchema'
 import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Form } from '@/components/ui/form'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useMenus } from '@/hooks/menu/useMenus'
@@ -21,15 +23,7 @@ export default function Menu() {
     defaultValues: data.menus[0] ?? undefined,
   })
 
-  const {
-    fields: menuSections,
-    // append,
-    // update,
-    // remove,
-  } = useFieldArray({
-    control: form.control,
-    name: 'menuSections',
-  })
+  const menuSections = form.watch('menuSections')
 
   // TODO:: キャンセルボタンで編集から抜けるとタブが選択されていない状態になる。よい解決方法が分からないので再レンダリングさせることで対応。
   const [refreshTab, setRefreshTab] = useState(0)
@@ -78,9 +72,16 @@ export default function Menu() {
                 </TabsTrigger>
               ))}
               {isEditing && (
-                <Button variant="link" onClick={() => alert('Edit Section')}>
-                  <FilePenLine />
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="link">
+                      <FilePenLine />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <MenuSectionListEdit />
+                  </DialogContent>
+                </Dialog>
               )}
             </TabsList>
             {menuSections.map((menuSection, idx) => (
