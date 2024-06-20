@@ -2,7 +2,6 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Grip, Trash2 } from 'lucide-react'
 
-import { formSchema } from '@/components/organisms/menu/formSchema'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import {
   FormControl,
@@ -18,6 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { formSchema } from '@/hooks/menu/useUpdateMenu'
 
 type Props = {
   path: `menuSections.${number}.menuItems.${number}`

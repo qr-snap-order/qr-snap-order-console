@@ -13,8 +13,8 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 import { z } from 'zod'
 
 import { MenuItem } from '@/components/organisms/menu/MenuItem'
-import { formSchema } from '@/components/organisms/menu/formSchema'
 import { Button } from '@/components/ui/button'
+import { formSchema } from '@/hooks/menu/useUpdateMenu'
 
 type Props = {
   path: `menuSections.${number}`

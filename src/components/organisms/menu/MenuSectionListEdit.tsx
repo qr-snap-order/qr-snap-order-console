@@ -12,8 +12,8 @@ import { Plus } from 'lucide-react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import { z } from 'zod'
 
-import { formSchema } from '@/components/organisms/menu/formSchema'
 import { Button } from '@/components/ui/button'
+import { formSchema } from '@/hooks/menu/useUpdateMenu'
 
 import { MenuSectionListItemEdit } from './MenuSectionListItemEdit'
 

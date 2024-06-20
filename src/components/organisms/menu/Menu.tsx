@@ -2,16 +2,18 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FilePenLine } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { MenuSection } from '@/components/organisms/menu/MenuSection'
 import MenuSectionListEdit from '@/components/organisms/menu/MenuSectionListEdit'
-import { formSchema } from '@/components/organisms/menu/formSchema'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Form } from '@/components/ui/form'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useMenus } from '@/hooks/menu/useMenus'
+import { useUpdateMenu } from '@/hooks/menu/useUpdateMenu'
+import { formSchema } from '@/hooks/menu/useUpdateMenu'
 
 export default function Menu() {
   const { data } = useMenus()
@@ -24,6 +26,8 @@ export default function Menu() {
   })
 
   const menuSections = form.watch('menuSections')
+
+  const [updateMenu, { loading }] = useUpdateMenu()
 
   // TODO:: キャンセルボタンで編集から抜けるとタブが選択されていない状態になる。よい解決方法が分からないので再レンダリングさせることで対応。
   const [refreshTab, setRefreshTab] = useState(0)
@@ -39,7 +43,15 @@ export default function Menu() {
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    const { data } = await updateMenu({
+      variables: values,
+    })
+
+    setIsEditing(false)
+
+    form.reset(data!.updateMenu)
+
+    toast.success(`Menu updated`)
   }
 
   return (
@@ -48,10 +60,17 @@ export default function Menu() {
         <div className="flex justify-end gap-2">
           {isEditing ? (
             <>
-              <Button type="button" onClick={handleClickCancel}>
+              <Button
+                disabled={loading}
+                type="button"
+                onClick={handleClickCancel}
+              >
                 Cancel
               </Button>
-              <Button disabled={!form.formState.isDirty} type="submit">
+              <Button
+                disabled={!form.formState.isDirty || loading}
+                type="submit"
+              >
                 Save
               </Button>
             </>
