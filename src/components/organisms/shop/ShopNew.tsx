@@ -37,9 +37,9 @@ export default function ShopNew() {
       },
     })
 
-    toast.success(`${data.createShop.name} Shop created`)
+    toast.success(`${data!.createShop.name} Shop created`)
 
-    router.navigate(`/shops/${data.createShop.id}`)
+    router.navigate(`/shops/${data!.createShop.id}`)
   }
 
   return (

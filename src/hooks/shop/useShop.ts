@@ -1,7 +1,9 @@
-import { gql, useSuspenseQuery } from '@apollo/client'
+import { useSuspenseQuery } from '@apollo/client'
 
-const GET_SHOP = gql`
-  query ($id: ID!) {
+import { gql } from '@/__generated__'
+
+const GET_SHOP = gql(`
+  query GetShop ($id: ID!) {
     shop(id: $id) {
       id
       name
@@ -11,21 +13,10 @@ const GET_SHOP = gql`
       }
     }
   }
-`
-
-type GetShopData = {
-  shop: {
-    employees: {
-      id: string
-      name: string
-    }[]
-    id: string
-    name: string
-  } | null
-}
+`)
 
 export const useShop = (id: string) => {
-  return useSuspenseQuery<GetShopData>(GET_SHOP, {
+  return useSuspenseQuery(GET_SHOP, {
     variables: { id },
   })
 }

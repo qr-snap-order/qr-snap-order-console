@@ -37,9 +37,9 @@ export default function EmployeeNew() {
       },
     })
 
-    toast.success(`${data.createEmployee.name} Employee created`)
+    toast.success(`${data!.createEmployee.name} Employee created`)
 
-    router.navigate(`/employees/${data.createEmployee.id}`)
+    router.navigate(`/employees/${data!.createEmployee.id}`)
   }
 
   return (

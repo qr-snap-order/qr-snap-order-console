@@ -1,8 +1,10 @@
-import { gql, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { z } from 'zod'
 
-const UPDATE_MENU = gql`
-  mutation ($id: ID!, $name: String, $menuSections: [UpdateMenuSectionInput]) {
+import { gql } from '@/__generated__'
+
+const UPDATE_MENU = gql(`
+  mutation UpdateMenu ($id: ID!, $name: String, $menuSections: [UpdateMenuSectionInput]) {
     updateMenu(id: $id, name: $name, menuSections: $menuSections) {
       id
       name
@@ -17,37 +19,7 @@ const UPDATE_MENU = gql`
       }
     }
   }
-`
-
-type UpdateMenuInput = {
-  id: string
-  name: string
-  menuSections: {
-    id: string
-    name: string
-    menuItems: {
-      id: string
-      name: string
-      price: number
-    }[]
-  }[]
-}
-
-type UpdateMenuResult = {
-  updateMenu: {
-    id: string
-    name: string
-    menuSections: {
-      id: string
-      name: string
-      menuItems: {
-        id: string
-        name: string
-        price: number
-      }[]
-    }[]
-  }
-}
+`)
 
 export const formSchema = z.object({
   id: z.string(),
@@ -68,5 +40,5 @@ export const formSchema = z.object({
 })
 
 export const useUpdateMenu = () => {
-  return useMutation<UpdateMenuResult, UpdateMenuInput>(UPDATE_MENU)
+  return useMutation(UPDATE_MENU)
 }

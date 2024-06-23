@@ -1,7 +1,9 @@
-import { gql, useSuspenseQuery } from '@apollo/client'
+import { useSuspenseQuery } from '@apollo/client'
 
-const GET_EMPLOYEE = gql`
-  query ($id: ID!) {
+import { gql } from '@/__generated__'
+
+const GET_EMPLOYEE = gql(`
+  query GetEmployee ($id: ID!) {
     employee(id: $id) {
       id
       name
@@ -11,21 +13,10 @@ const GET_EMPLOYEE = gql`
       }
     }
   }
-`
-
-type GetEmployeeData = {
-  employee: {
-    id: string
-    name: string
-    shops: {
-      id: string
-      name: string
-    }[]
-  } | null
-}
+`)
 
 export const useEmployee = (id: string) => {
-  return useSuspenseQuery<GetEmployeeData>(GET_EMPLOYEE, {
+  return useSuspenseQuery(GET_EMPLOYEE, {
     variables: { id },
   })
 }
