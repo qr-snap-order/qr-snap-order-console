@@ -1,28 +1,30 @@
-import { gql, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 
-const CREATE_EMPLOYEE = gql`
-  mutation ($name: String!) {
+import { gql } from '@/__generated__'
+
+const CREATE_EMPLOYEE = gql(`
+  mutation CreateEmployee ($name: String!) {
     createEmployee(name: $name) {
       id
       name
     }
   }
-`
+`)
 
 export const useCreateEmployee = () => {
   return useMutation(CREATE_EMPLOYEE, {
-    update(cache, { data: { createEmployee } }) {
+    update(cache, { data }) {
       cache.modify({
         fields: {
           employees(existingEmployees = []) {
             const newEmployeeRef = cache.writeFragment({
-              data: createEmployee,
-              fragment: gql`
+              data: data!.createEmployee,
+              fragment: gql(`
                 fragment NewEmployee on Employee {
                   id
                   name
                 }
-              `,
+              `),
             })
             return [...existingEmployees, newEmployeeRef]
           },

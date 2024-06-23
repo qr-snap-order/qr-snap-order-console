@@ -1,7 +1,9 @@
-import { gql, useSuspenseQuery } from '@apollo/client'
+import { useSuspenseQuery } from '@apollo/client'
 
-const GET_MENUS = gql`
-  query {
+import { gql } from '@/__generated__'
+
+const GET_MENUS = gql(`
+  query GetMenus {
     menus {
       id
       name
@@ -20,28 +22,8 @@ const GET_MENUS = gql`
       }
     }
   }
-`
-
-type MenuData = {
-  menus: {
-    id: string
-    name: string
-    menuSections: {
-      id: string
-      name: string
-      menuItems: {
-        id: string
-        name: string
-        price: number
-        categories: {
-          id: string
-          name: string
-        }[]
-      }[]
-    }[]
-  }[]
-}
+`)
 
 export const useMenus = () => {
-  return useSuspenseQuery<MenuData>(GET_MENUS)
+  return useSuspenseQuery(GET_MENUS)
 }

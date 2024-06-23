@@ -37,9 +37,9 @@ export default function UserNew() {
       },
     })
 
-    toast.success(`${data.createUser.name} User created`)
+    toast.success(`${data!.createUser.name} User created`)
 
-    router.navigate(`/users/${data.createUser.id}`)
+    router.navigate(`/users/${data!.createUser.id}`)
   }
 
   return (
