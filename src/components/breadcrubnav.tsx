@@ -1,3 +1,5 @@
+import * as React from 'react'
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,8 +21,8 @@ export function BreadcrumbNav(props: Props) {
     <Breadcrumb>
       <BreadcrumbList>
         {props.links.map((link, index) => (
-          <>
-            <BreadcrumbItem key={index}>
+          <React.Fragment key={index}>
+            <BreadcrumbItem>
               {link.href ? (
                 <BreadcrumbLink href={link.href}>{link.label}</BreadcrumbLink>
               ) : (
@@ -28,7 +30,7 @@ export function BreadcrumbNav(props: Props) {
               )}
             </BreadcrumbItem>
             {props.links.length - 1 !== index && <BreadcrumbSeparator />}
-          </>
+          </React.Fragment>
         ))}
       </BreadcrumbList>
     </Breadcrumb>

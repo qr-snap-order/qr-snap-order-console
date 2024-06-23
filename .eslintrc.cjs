@@ -50,6 +50,7 @@ module.exports = {
       },
     ],
     'perfectionist/sort-objects': 'off',
+    'perfectionist/sort-object-types': 'off',
     /**
      * @see https://eslint-plugin-perfectionist.azat.io/rules/sort-jsx-props#sort-jsx-props
      */
