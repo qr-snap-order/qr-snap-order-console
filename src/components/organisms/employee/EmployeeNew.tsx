@@ -34,6 +34,8 @@ export default function EmployeeNew() {
     const { data } = await createEmployee({
       variables: {
         name: values.name,
+        shops: [],
+        employeeGroups: [],
       },
     })
 

@@ -34,6 +34,8 @@ export default function ShopNew() {
     const { data } = await createShop({
       variables: {
         name: values.name,
+        employees: [],
+        shopGroups: [],
       },
     })
 
