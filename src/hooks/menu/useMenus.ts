@@ -14,6 +14,7 @@ const GET_MENUS = gql(`
           id
           name
           price
+          image
           categories {
             id
             name

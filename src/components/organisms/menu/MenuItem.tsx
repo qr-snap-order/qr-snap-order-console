@@ -2,7 +2,10 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Grip, Trash2 } from 'lucide-react'
 
-import { AspectRatio } from '@/components/ui/aspect-ratio'
+import {
+  type FormInput,
+  type FormOutput,
+} from '@/components/organisms/menu/formSchema'
 import {
   FormControl,
   FormField,
@@ -17,7 +20,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { formSchema } from '@/hooks/menu/useUpdateMenu'
 
 type Props = {
   path: `menuSections.${number}.menuItems.${number}`
@@ -25,11 +27,36 @@ type Props = {
   isEditing: boolean
   id: string
 }
+import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { z } from 'zod'
+
+import { InputImage } from '@/components/input-image'
+
+function useImage(path: `menuSections.${number}.menuItems.${number}`) {
+  const form = useFormContext<FormInput, undefined, FormOutput>()
+
+  const image = form.watch(`${path}.image`)
+  const uploadImage = form.watch(`${path}.uploadImage`)
+
+  const src = useMemo(() => {
+    if (uploadImage) return URL.createObjectURL(uploadImage)
+    if (image) return `http://localhost:4566/develop-public/${image}`
+    return 'http://localhost:5173/noimage.png'
+  }, [image, uploadImage])
+
+  function setImage(image: File) {
+    form.setValue(`${path}.uploadImage`, image, { shouldDirty: true })
+  }
+
+  return {
+    src,
+    setImage,
+  }
+}
 
 export function MenuItem({ path, onRemove, isEditing, id }: Props) {
-  const { control } = useFormContext<z.infer<typeof formSchema>>()
+  const form = useFormContext<FormInput, undefined, FormOutput>()
+  const { control } = form
 
   const {
     attributes,
@@ -43,6 +70,15 @@ export function MenuItem({ path, onRemove, isEditing, id }: Props) {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition: transition || undefined,
+  }
+
+  const { src, setImage } = useImage(path)
+
+  function handleChangeImage(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    if (file) {
+      setImage(file)
+    }
   }
 
   return (
@@ -69,13 +105,13 @@ export function MenuItem({ path, onRemove, isEditing, id }: Props) {
           </Tooltip>
         </TooltipProvider>
       )}
-      <AspectRatio className="bg-muted" ratio={4 / 3}>
-        <img
-          className="size-full object-cover"
-          alt="menu item image"
-          src="http://localhost:5173/noimage.png"
-        />
-      </AspectRatio>
+      <InputImage
+        alt="menu item"
+        rate={4 / 3}
+        readOnly={!isEditing}
+        src={src}
+        onChange={handleChangeImage}
+      />
       <FormField
         control={control}
         name={`${path}.name`}

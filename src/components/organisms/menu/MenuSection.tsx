@@ -10,18 +10,20 @@ import {
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable'
 import { Plus } from 'lucide-react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
-import { z } from 'zod'
 
 import { MenuItem } from '@/components/organisms/menu/MenuItem'
+import {
+  type FormInput,
+  type FormOutput,
+} from '@/components/organisms/menu/formSchema'
 import { Button } from '@/components/ui/button'
-import { formSchema } from '@/hooks/menu/useUpdateMenu'
 
 type Props = {
   path: `menuSections.${number}`
   isEditing: boolean
 }
 export function MenuSection({ path, isEditing }: Props) {
-  const { control } = useFormContext<z.infer<typeof formSchema>>()
+  const { control } = useFormContext<FormInput, undefined, FormOutput>()
 
   const {
     fields: menuItems,
@@ -50,6 +52,7 @@ export function MenuSection({ path, isEditing }: Props) {
       id: crypto.randomUUID(),
       name: '',
       price: 0,
+      image: null,
     })
   }
 
