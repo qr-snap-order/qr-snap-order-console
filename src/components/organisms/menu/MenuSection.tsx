@@ -53,6 +53,7 @@ export function MenuSection({ path, isEditing }: Props) {
       name: '',
       price: 0,
       image: null,
+      menuItemGroups: [],
     })
   }
 

@@ -15,6 +15,10 @@ const UPDATE_MENU = gql(`
           name
           price
           image
+          menuItemGroups {
+            id
+            name
+          }
         }
       }
     }

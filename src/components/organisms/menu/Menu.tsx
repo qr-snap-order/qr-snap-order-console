@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FilePenLine } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 
 import { MenuSection } from '@/components/organisms/menu/MenuSection'
@@ -82,6 +83,11 @@ export default function Menu() {
               <Button type="button" onClick={handleClickEdit}>
                 Edit
               </Button>
+              <Link to="/menu-item-groups">
+                <Button type="button" variant="outline">
+                  Grouping
+                </Button>
+              </Link>
             </>
           )}
         </div>

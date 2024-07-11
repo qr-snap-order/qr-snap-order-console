@@ -24,7 +24,7 @@ export function useFilter<T>(data: T[], columns: (keyof T)[]) {
               columns.some(
                 (column) =>
                   typeof item[column] === 'string' &&
-                  normalize(item[column]).includes(normalize(keyword)) // あいまいな検索を実現するために文字列を正規化している
+                  normalize(item[column] as string).includes(normalize(keyword)) // あいまいな検索を実現するために文字列を正規化している
               )
             )
           ),

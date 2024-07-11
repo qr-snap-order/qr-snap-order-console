@@ -17,6 +17,14 @@ export const formSchema = z.object({
             .nullable()
             .transform(() => undefined),
           uploadImage: z.custom<File>().nullish(),
+          menuItemGroups: z.array(
+            z
+              .object({
+                id: z.string(),
+                name: z.string().min(1).max(255),
+              })
+              .transform((menuItemGroup) => menuItemGroup.id)
+          ),
         })
       ),
     })

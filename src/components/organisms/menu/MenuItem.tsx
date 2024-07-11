@@ -28,9 +28,10 @@ type Props = {
   id: string
 }
 import { useMemo } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { InputImage } from '@/components/input-image'
+import { Badge } from '@/components/ui/badge'
 
 function useImage(path: `menuSections.${number}.menuItems.${number}`) {
   const form = useFormContext<FormInput, undefined, FormOutput>()
@@ -57,6 +58,15 @@ function useImage(path: `menuSections.${number}.menuItems.${number}`) {
 export function MenuItem({ path, onRemove, isEditing, id }: Props) {
   const form = useFormContext<FormInput, undefined, FormOutput>()
   const { control } = form
+
+  const {
+    fields: menuItemGroups,
+    // append,
+    // remove,
+  } = useFieldArray({
+    control,
+    name: `${path}.menuItemGroups`,
+  })
 
   const {
     attributes,
@@ -145,6 +155,11 @@ export function MenuItem({ path, onRemove, isEditing, id }: Props) {
           </FormItem>
         )}
       />
+      <div>
+        {menuItemGroups.map((menuItemGroup) => (
+          <Badge key={menuItemGroup.id}>{menuItemGroup.name}</Badge>
+        ))}
+      </div>
       <div className="flex justify-end gap-2">
         {isEditing && <Trash2 onClick={onRemove} />}
       </div>
