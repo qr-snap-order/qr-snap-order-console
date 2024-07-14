@@ -1,4 +1,4 @@
-import { BreadcrumbNav } from '@/components/breadcrubnav'
+import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
 import MenuComponent from '@/components/organisms/menu/Menu'
 
 export default function Menu() {

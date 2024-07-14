@@ -30,7 +30,7 @@ type Props = {
 import { useMemo } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
-import { InputImage } from '@/components/input-image'
+import { InputImage } from '@/components/organisms/input-image'
 import { Badge } from '@/components/ui/badge'
 
 function useImage(path: `menuSections.${number}.menuItems.${number}`) {
@@ -40,18 +40,26 @@ function useImage(path: `menuSections.${number}.menuItems.${number}`) {
   const uploadImage = form.watch(`${path}.uploadImage`)
 
   const src = useMemo(() => {
-    if (uploadImage) return URL.createObjectURL(uploadImage)
-    if (image) return `http://localhost:4566/develop-public/${image}`
-    return 'http://localhost:5173/noimage.png'
+    if (uploadImage !== undefined)
+      return uploadImage ? URL.createObjectURL(uploadImage) : null
+
+    if (image) return `${import.meta.env.VITE_PUBLIC_STORAGE_URL}/${image}`
+
+    return null
   }, [image, uploadImage])
 
-  function setImage(image: File) {
-    form.setValue(`${path}.uploadImage`, image, { shouldDirty: true })
+  function setUploadImage(uploadImage: File | null) {
+    // FIXME:: 元の状態に戻したとき、isDirtyがfalseになるようにしたい。
+    form.setValue(
+      `${path}.uploadImage`,
+      uploadImage !== image ? uploadImage : undefined,
+      { shouldDirty: true }
+    )
   }
 
   return {
     src,
-    setImage,
+    setUploadImage,
   }
 }
 
@@ -82,13 +90,17 @@ export function MenuItem({ path, onRemove, isEditing, id }: Props) {
     transition: transition || undefined,
   }
 
-  const { src, setImage } = useImage(path)
+  const { src, setUploadImage } = useImage(path)
 
   function handleChangeImage(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
     if (file) {
-      setImage(file)
+      setUploadImage(file)
     }
+  }
+
+  function handleRemoveImage() {
+    setUploadImage(null)
   }
 
   return (
@@ -117,10 +129,11 @@ export function MenuItem({ path, onRemove, isEditing, id }: Props) {
       )}
       <InputImage
         alt="menu item"
-        rate={4 / 3}
+        ratio={4 / 3}
         readOnly={!isEditing}
         src={src}
         onChange={handleChangeImage}
+        onRemove={handleRemoveImage}
       />
       <FormField
         control={control}

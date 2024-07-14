@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 
-import { BreadcrumbNav } from '@/components/breadcrubnav'
+import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Button } from '@/components/ui/button'
 

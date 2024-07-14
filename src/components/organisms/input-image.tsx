@@ -1,44 +1,58 @@
-import { Trash2 } from 'lucide-react'
+import { ImageOff } from 'lucide-react'
 import { useRef } from 'react'
 
 import { AspectRatio } from '@/components/ui/aspect-ratio'
+import { cn } from '@/lib/utils'
 
 type InputImageProps = {
-  src: string
+  src?: null | string
   alt: string
   accept?: string
-  rate: number
+  ratio: number
   readOnly: boolean
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onRemove?: () => void
 }
 export function InputImage({
   src,
   alt,
   accept,
-  rate,
+  ratio,
   readOnly,
   onChange,
+  onRemove,
 }: InputImageProps) {
   const uploadImageRef = useRef<HTMLInputElement>(null)
 
   function handleClickImage() {
-    if (readOnly) return
     uploadImageRef.current?.click()
   }
 
   function handleChangeImage(event: React.ChangeEvent<HTMLInputElement>) {
-    onChange(event)
+    onChange && onChange(event)
+  }
+
+  function handleRemoveImage() {
+    onRemove && onRemove()
   }
 
   return (
-    <AspectRatio className="relative bg-muted" ratio={rate}>
+    <AspectRatio className="relative bg-muted" ratio={ratio}>
       <img
-        className="size-full object-cover"
+        className={cn(
+          'size-full object-cover',
+          readOnly ? 'pointer-events-none' : 'cursor-pointer'
+        )}
         alt={alt}
-        src={src}
+        src={src || import.meta.env.VITE_PUBLIC_NOIMAGE}
         onClick={handleClickImage}
       />
-      {readOnly || <Trash2 className="absolute right-1 top-1" />}
+      {readOnly || !src || (
+        <ImageOff
+          className="absolute right-1 top-1 cursor-pointer"
+          onClick={handleRemoveImage}
+        />
+      )}
       <input
         ref={uploadImageRef}
         className="hidden"

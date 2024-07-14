@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-import { BreadcrumbNav } from '@/components/breadcrubnav'
+import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
 import UserNew from '@/components/organisms/user/UserNew'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
