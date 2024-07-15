@@ -32,6 +32,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { InputImage } from '@/components/organisms/input-image'
 import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
 
 function useImage(path: `menuSections.${number}.menuItems.${number}`) {
   const form = useFormContext<FormInput, undefined, FormOutput>()
@@ -76,14 +77,8 @@ export function MenuItem({ path, onRemove, isEditing, id }: Props) {
     name: `${path}.menuItemGroups`,
   })
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id })
+  const { listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id })
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -106,18 +101,20 @@ export function MenuItem({ path, onRemove, isEditing, id }: Props) {
   return (
     <div
       ref={setNodeRef}
-      className={
-        'relative flex flex-col gap-y-2 bg-white ' +
-        (isDragging ? 'opacity-25' : '')
-      }
+      className={cn(
+        'relative flex flex-col gap-y-2 bg-white ',
+        isDragging && 'opacity-25'
+      )}
       style={style}
-      {...attributes}
     >
       {isEditing && (
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Grip className="absolute left-1 top-1 z-10" {...listeners} />
+              <Grip
+                className="absolute left-1 top-1 z-10 cursor-pointer"
+                {...listeners}
+              />
             </TooltipTrigger>
             <TooltipContent className="bg-primary">
               <p className="text-white">
