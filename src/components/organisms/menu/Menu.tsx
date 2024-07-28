@@ -1,3 +1,4 @@
+import { DevTool } from '@hookform/devtools'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FilePenLine } from 'lucide-react'
 import { useState } from 'react'
@@ -123,6 +124,7 @@ export default function Menu() {
           </Tabs>
         </div>
       </form>
+      <DevTool control={form.control} />
     </Form>
   )
 }
