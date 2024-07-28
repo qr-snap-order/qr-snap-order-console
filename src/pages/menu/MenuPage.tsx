@@ -1,7 +1,7 @@
 import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
-import MenuComponent from '@/components/organisms/menu/Menu'
+import Menu from '@/components/organisms/menu/Menu'
 
-export default function Menu() {
+export default function MenuPage() {
   const breadcrumb = [{ label: 'Menu' }]
 
   return (
@@ -10,7 +10,7 @@ export default function Menu() {
         <BreadcrumbNav links={breadcrumb} />
       </div>
       <div>
-        <MenuComponent />
+        <Menu />
       </div>
     </div>
   )

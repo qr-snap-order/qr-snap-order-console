@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
-import UserNew from '@/components/organisms/user/UserNew'
+import MenuItemGroupNew from '@/components/organisms/menu/MenuItemGroupNew'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -13,19 +13,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { useMenuItemGroups } from '@/hooks/menu/useMenuItemGroups'
 import { useFilter } from '@/hooks/useFilter'
-import { useUsers } from '@/hooks/user/useUsers'
 
-export default function UserList() {
-  const { data } = useUsers()
+export default function MenuItemGroupListPage() {
+  const breadcrumb = [{ label: 'Menu', href: '/menu' }, { label: 'Grouping' }]
+
+  const { data } = useMenuItemGroups()
 
   const {
     filter,
     setFilter,
-    result: users,
-  } = useFilter(data.users, ['id', 'name'])
-
-  const breadcrumb = [{ label: 'Users' }]
+    result: menuItemGroups,
+  } = useFilter(data.menuItemGroups, ['id', 'name'])
 
   return (
     <div className="flex flex-col gap-4">
@@ -43,7 +43,7 @@ export default function UserList() {
             <Button>New</Button>
           </DialogTrigger>
           <DialogContent>
-            <UserNew />
+            <MenuItemGroupNew />
           </DialogContent>
         </Dialog>
       </div>
@@ -56,12 +56,12 @@ export default function UserList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.map((user) => (
-            <TableRow key={user.id}>
-              <TableCell>{user.id}</TableCell>
-              <TableCell>{user.name}</TableCell>
+          {menuItemGroups.map((menuItemGroup) => (
+            <TableRow key={menuItemGroup.id}>
+              <TableCell>{menuItemGroup.id}</TableCell>
+              <TableCell>{menuItemGroup.name}</TableCell>
               <TableCell>
-                <Link to={`/users/${user.id}`}>
+                <Link to={`/menu-item-groups/${menuItemGroup.id}`}>
                   <Button variant="link">Show</Button>
                 </Link>
               </TableCell>

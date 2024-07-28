@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
-import ShopNew from '@/components/organisms/shop/ShopNew'
+import EmployeeNew from '@/components/organisms/employee/EmployeeNew'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -13,19 +13,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { useShops } from '@/hooks/shop/useShops'
+import { useEmployees } from '@/hooks/employee/useEmployees'
 import { useFilter } from '@/hooks/useFilter'
 
-export default function ShopList() {
-  const { data } = useShops()
+export default function EmployeeListPage() {
+  const { data } = useEmployees()
 
   const {
     filter,
     setFilter,
-    result: shops,
-  } = useFilter(data.shops, ['id', 'name'])
+    result: employees,
+  } = useFilter(data.employees, ['id', 'name'])
 
-  const breadcrumb = [{ label: 'Shops' }]
+  const breadcrumb = [{ label: 'Employees' }]
 
   return (
     <div className="flex flex-col gap-4">
@@ -43,7 +43,7 @@ export default function ShopList() {
             <Button>New</Button>
           </DialogTrigger>
           <DialogContent>
-            <ShopNew />
+            <EmployeeNew />
           </DialogContent>
         </Dialog>
       </div>
@@ -56,12 +56,12 @@ export default function ShopList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {shops.map((shop) => (
-            <TableRow key={shop.id}>
-              <TableCell>{shop.id}</TableCell>
-              <TableCell>{shop.name}</TableCell>
+          {employees.map((employee) => (
+            <TableRow key={employee.id}>
+              <TableCell>{employee.id}</TableCell>
+              <TableCell>{employee.name}</TableCell>
               <TableCell>
-                <Link to={`/shops/${shop.id}`}>
+                <Link to={`/employees/${employee.id}`}>
                   <Button variant="link">Show</Button>
                 </Link>
               </TableCell>

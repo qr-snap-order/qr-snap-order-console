@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
-import MenuItemGroupNew from '@/components/organisms/menu/MenuItemGroupNew'
+import ShopNew from '@/components/organisms/shop/ShopNew'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -13,19 +13,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { useMenuItemGroups } from '@/hooks/menu/useMenuItemGroups'
+import { useShops } from '@/hooks/shop/useShops'
 import { useFilter } from '@/hooks/useFilter'
 
-export default function MenuItemGroupList() {
-  const breadcrumb = [{ label: 'Menu', href: '/menu' }, { label: 'Grouping' }]
-
-  const { data } = useMenuItemGroups()
+export default function ShopListPage() {
+  const { data } = useShops()
 
   const {
     filter,
     setFilter,
-    result: menuItemGroups,
-  } = useFilter(data.menuItemGroups, ['id', 'name'])
+    result: shops,
+  } = useFilter(data.shops, ['id', 'name'])
+
+  const breadcrumb = [{ label: 'Shops' }]
 
   return (
     <div className="flex flex-col gap-4">
@@ -43,7 +43,7 @@ export default function MenuItemGroupList() {
             <Button>New</Button>
           </DialogTrigger>
           <DialogContent>
-            <MenuItemGroupNew />
+            <ShopNew />
           </DialogContent>
         </Dialog>
       </div>
@@ -56,12 +56,12 @@ export default function MenuItemGroupList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {menuItemGroups.map((menuItemGroup) => (
-            <TableRow key={menuItemGroup.id}>
-              <TableCell>{menuItemGroup.id}</TableCell>
-              <TableCell>{menuItemGroup.name}</TableCell>
+          {shops.map((shop) => (
+            <TableRow key={shop.id}>
+              <TableCell>{shop.id}</TableCell>
+              <TableCell>{shop.name}</TableCell>
               <TableCell>
-                <Link to={`/menu-item-groups/${menuItemGroup.id}`}>
+                <Link to={`/shops/${shop.id}`}>
                   <Button variant="link">Show</Button>
                 </Link>
               </TableCell>

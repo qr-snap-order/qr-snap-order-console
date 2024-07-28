@@ -3,10 +3,9 @@ import { useParams } from 'react-router-dom'
 import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Button } from '@/components/ui/button'
+import { useMenuItemGroup } from '@/hooks/menu/useMenuItemGroup'
 
-import { useMenuItemGroup } from '../../hooks/menu/useMenuItemGroup'
-
-export default function MenuItemGroup() {
+export default function MenuItemGroupPage() {
   const { id } = useParams()
 
   const { data } = useMenuItemGroup(id as string)

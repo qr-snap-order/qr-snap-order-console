@@ -2,17 +2,17 @@ import { useParams } from 'react-router-dom'
 
 import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
 import { Button } from '@/components/ui/button'
-import { useUser } from '@/hooks/user/useUser'
+import { useEmployee } from '@/hooks/employee/useEmployee'
 
-export default function User() {
+export default function EmployeePage() {
   const { id } = useParams()
-  const { data } = useUser(id as string)
+  const { data } = useEmployee(id as string)
 
-  if (!data.user) return <div>Not Found</div>
+  if (!data.employee) return <div>Not Found</div>
 
   const breadcrumb = [
-    { label: 'Users', href: '/users' },
-    { label: data.user.name },
+    { label: 'Employees', href: '/employees' },
+    { label: data.employee.name },
   ]
 
   return (
@@ -25,8 +25,8 @@ export default function User() {
         <Button>Delete</Button>
       </div>
       <div>
-        <p>{data.user.id}</p>
-        <p>{data.user.name}</p>
+        <p>{data.employee.id}</p>
+        <p>{data.employee.name}</p>
       </div>
     </div>
   )

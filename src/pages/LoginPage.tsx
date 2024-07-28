@@ -25,7 +25,7 @@ import { cn } from '@/lib/utils'
 
 const tenantName = 'your tenant' // TODO
 
-export default function Login() {
+export default function LoginPage() {
   return (
     <div className="flex h-dvh flex-grow items-center justify-center">
       <Card className="mx-auto mb-8 w-96">

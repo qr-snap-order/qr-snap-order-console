@@ -2,17 +2,17 @@ import { useParams } from 'react-router-dom'
 
 import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
 import { Button } from '@/components/ui/button'
-import { useEmployee } from '@/hooks/employee/useEmployee'
+import { useShop } from '@/hooks/shop/useShop'
 
-export default function Employee() {
+export default function ShopPage() {
   const { id } = useParams()
-  const { data } = useEmployee(id as string)
+  const { data } = useShop(id as string)
 
-  if (!data.employee) return <div>Not Found</div>
+  if (!data.shop) return <div>Not Found</div>
 
   const breadcrumb = [
-    { label: 'Employees', href: '/employees' },
-    { label: data.employee.name },
+    { label: 'Shops', href: '/shops' },
+    { label: data.shop.name },
   ]
 
   return (
@@ -25,8 +25,8 @@ export default function Employee() {
         <Button>Delete</Button>
       </div>
       <div>
-        <p>{data.employee.id}</p>
-        <p>{data.employee.name}</p>
+        <p>{data.shop.id}</p>
+        <p>{data.shop.name}</p>
       </div>
     </div>
   )

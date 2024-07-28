@@ -1,63 +1,62 @@
 import { createBrowserRouter } from 'react-router-dom'
 
-import App from '@/App.tsx'
-import Login from '@/pages/Login'
-import Employee from '@/pages/employee/Employee'
-import EmployeeList from '@/pages/employee/EmployeeList'
-import Menu from '@/pages/menu/Menu'
-import MenuItemGroupList from '@/pages/menu/MenuItemGroupList'
-import Shop from '@/pages/shop/Shop'
-import ShopList from '@/pages/shop/ShopList'
-import User from '@/pages/user/User'
-import UserList from '@/pages/user/UserList'
-
-import MenuItemGroup from '../pages/menu/MenuItemGroup'
+import AppPage from '@/App.tsx'
+import LoginPage from '@/pages/LoginPage'
+import EmployeeListPage from '@/pages/employee/EmployeeListPage'
+import EmployeePage from '@/pages/employee/EmployeePage'
+import MenuItemGroupListPage from '@/pages/menu/MenuItemGroupListPage'
+import MenuItemGroupPage from '@/pages/menu/MenuItemGroupPage'
+import MenuPage from '@/pages/menu/MenuPage'
+import ShopListPage from '@/pages/shop/ShopListPage'
+import ShopPage from '@/pages/shop/ShopPage'
+import UserListPage from '@/pages/user/UserListPage'
+import UserPage from '@/pages/user/UserPage'
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <AppPage />,
     children: [
       {
         path: 'users',
-        element: <UserList />,
+        element: <UserListPage />,
       },
       {
         path: 'users/:id',
-        element: <User />,
+        element: <UserPage />,
       },
       {
         path: 'shops',
-        element: <ShopList />,
+        element: <ShopListPage />,
       },
       {
         path: 'shops/:id',
-        element: <Shop />,
+        element: <ShopPage />,
       },
       {
         path: 'employees',
-        element: <EmployeeList />,
+        element: <EmployeeListPage />,
       },
       {
         path: 'employees/:id',
-        element: <Employee />,
+        element: <EmployeePage />,
       },
       {
         path: 'menu',
-        element: <Menu />,
+        element: <MenuPage />,
       },
       {
         path: 'menu-item-groups',
-        element: <MenuItemGroupList />,
+        element: <MenuItemGroupListPage />,
       },
       {
         path: 'menu-item-groups/:id',
-        element: <MenuItemGroup />,
+        element: <MenuItemGroupPage />,
       },
     ],
   },
   {
     path: 'login',
-    element: <Login />, // TODO:: create a login page
+    element: <LoginPage />, // TODO:: create a login page
   },
 ])
