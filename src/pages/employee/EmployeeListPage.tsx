@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
+import EmployeeNew from '@/components/domain/employee/EmployeeNew'
 import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
-import EmployeeNew from '@/components/organisms/employee/EmployeeNew'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'

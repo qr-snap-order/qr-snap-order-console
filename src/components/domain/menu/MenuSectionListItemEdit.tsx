@@ -5,7 +5,7 @@ import { Grip, Trash2 } from 'lucide-react'
 import {
   type FormInput,
   type FormOutput,
-} from '@/components/organisms/menu/formSchema'
+} from '@/components/domain/menu/formSchema'
 import {
   FormControl,
   FormField,

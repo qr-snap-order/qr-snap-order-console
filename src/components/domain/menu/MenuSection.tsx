@@ -11,11 +11,11 @@ import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable'
 import { Plus } from 'lucide-react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
-import { MenuItem } from '@/components/organisms/menu/MenuItem'
+import { MenuItem } from '@/components/domain/menu/MenuItem'
 import {
   type FormInput,
   type FormOutput,
-} from '@/components/organisms/menu/formSchema'
+} from '@/components/domain/menu/formSchema'
 import { Button } from '@/components/ui/button'
 
 type Props = {

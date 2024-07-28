@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
+import MenuItemGroupNew from '@/components/domain/menu/MenuItemGroupNew'
 import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
-import MenuItemGroupNew from '@/components/organisms/menu/MenuItemGroupNew'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'

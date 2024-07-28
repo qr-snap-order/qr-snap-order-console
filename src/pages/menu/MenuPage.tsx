@@ -1,5 +1,5 @@
+import Menu from '@/components/domain/menu/Menu'
 import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
-import Menu from '@/components/organisms/menu/Menu'
 
 export default function MenuPage() {
   const breadcrumb = [{ label: 'Menu' }]

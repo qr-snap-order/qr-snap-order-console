@@ -6,13 +6,13 @@ import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 
-import { MenuSection } from '@/components/organisms/menu/MenuSection'
-import MenuSectionListEdit from '@/components/organisms/menu/MenuSectionListEdit'
+import { MenuSection } from '@/components/domain/menu/MenuSection'
+import MenuSectionListEdit from '@/components/domain/menu/MenuSectionListEdit'
 import {
   type FormInput,
   type FormOutput,
   formSchema,
-} from '@/components/organisms/menu/formSchema'
+} from '@/components/domain/menu/formSchema'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Form } from '@/components/ui/form'

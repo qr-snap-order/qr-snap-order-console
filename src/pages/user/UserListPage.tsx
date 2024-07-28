@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
+import UserNew from '@/components/domain/user/UserNew'
 import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
-import UserNew from '@/components/organisms/user/UserNew'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
