@@ -3,8 +3,8 @@ import { useMutation } from '@apollo/client'
 import { gql } from '@/__generated__'
 
 const CREATE_EMPLOYEE = gql(`
-  mutation CreateEmployee ($name: String!) {
-    createEmployee(name: $name) {
+  mutation CreateEmployee ($name: String!, $shops: [ID!]!, $employeeGroups: [ID!]!) {
+    createEmployee(name: $name, shops: $shops, employeeGroups: $employeeGroups) {
       id
       name
     }

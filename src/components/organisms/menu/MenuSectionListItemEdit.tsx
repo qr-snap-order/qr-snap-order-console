@@ -3,6 +3,10 @@ import { CSS } from '@dnd-kit/utilities'
 import { Grip, Trash2 } from 'lucide-react'
 
 import {
+  type FormInput,
+  type FormOutput,
+} from '@/components/organisms/menu/formSchema'
+import {
   FormControl,
   FormField,
   FormItem,
@@ -15,7 +19,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { formSchema } from '@/hooks/menu/useUpdateMenu'
 
 type Props = {
   path: `menuSections.${number}`
@@ -23,12 +26,11 @@ type Props = {
   id: string
 }
 import { useFormContext } from 'react-hook-form'
-import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
 
 export function MenuSectionListItemEdit({ path, onRemove, id }: Props) {
-  const { control } = useFormContext<z.infer<typeof formSchema>>()
+  const { control } = useFormContext<FormInput, undefined, FormOutput>()
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id })

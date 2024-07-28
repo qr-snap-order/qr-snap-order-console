@@ -10,15 +10,17 @@ import {
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable'
 import { Plus } from 'lucide-react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
-import { z } from 'zod'
 
+import {
+  type FormInput,
+  type FormOutput,
+} from '@/components/organisms/menu/formSchema'
 import { Button } from '@/components/ui/button'
-import { formSchema } from '@/hooks/menu/useUpdateMenu'
 
 import { MenuSectionListItemEdit } from './MenuSectionListItemEdit'
 
 export default function MenuSectionListEdit() {
-  const { control } = useFormContext<z.infer<typeof formSchema>>()
+  const { control } = useFormContext<FormInput, undefined, FormOutput>()
 
   const {
     fields: menuSections,

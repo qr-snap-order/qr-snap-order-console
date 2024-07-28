@@ -1,26 +1,31 @@
+import { DevTool } from '@hookform/devtools'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FilePenLine } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
-import { z } from 'zod'
 
 import { MenuSection } from '@/components/organisms/menu/MenuSection'
 import MenuSectionListEdit from '@/components/organisms/menu/MenuSectionListEdit'
+import {
+  type FormInput,
+  type FormOutput,
+  formSchema,
+} from '@/components/organisms/menu/formSchema'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Form } from '@/components/ui/form'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useMenus } from '@/hooks/menu/useMenus'
 import { useUpdateMenu } from '@/hooks/menu/useUpdateMenu'
-import { formSchema } from '@/hooks/menu/useUpdateMenu'
 
 export default function Menu() {
   const { data } = useMenus()
 
   const [isEditing, setIsEditing] = useState(false)
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(formSchema),
     defaultValues: data.menus[0] ?? undefined,
   })
@@ -42,7 +47,7 @@ export default function Menu() {
     setRefreshTab((i) => i + 1)
   }
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: FormOutput) {
     const { data } = await updateMenu({
       variables: values,
     })
@@ -79,6 +84,11 @@ export default function Menu() {
               <Button type="button" onClick={handleClickEdit}>
                 Edit
               </Button>
+              <Link to="/menu-item-groups">
+                <Button type="button" variant="outline">
+                  Grouping
+                </Button>
+              </Link>
             </>
           )}
         </div>
@@ -114,6 +124,7 @@ export default function Menu() {
           </Tabs>
         </div>
       </form>
+      <DevTool control={form.control} />
     </Form>
   )
 }

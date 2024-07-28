@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 
-import { SideNav } from './components/sidenav'
+import { SideNav } from './components/organisms/sidenav'
 
 function App() {
   return (

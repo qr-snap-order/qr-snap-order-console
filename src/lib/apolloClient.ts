@@ -1,14 +1,10 @@
-import {
-  ApolloClient,
-  InMemoryCache,
-  createHttpLink,
-  from,
-} from '@apollo/client'
+import { ApolloClient, InMemoryCache, from } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs'
 import { toast } from 'sonner'
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
   uri: import.meta.env.VITE_PUBLIC_GRAPHQL_ENDPOINT,
 })
 

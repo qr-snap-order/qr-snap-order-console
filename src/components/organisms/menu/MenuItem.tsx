@@ -2,7 +2,10 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Grip, Trash2 } from 'lucide-react'
 
-import { AspectRatio } from '@/components/ui/aspect-ratio'
+import {
+  type FormInput,
+  type FormOutput,
+} from '@/components/organisms/menu/formSchema'
 import {
   FormControl,
   FormField,
@@ -17,7 +20,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { formSchema } from '@/hooks/menu/useUpdateMenu'
 
 type Props = {
   path: `menuSections.${number}.menuItems.${number}`
@@ -25,41 +27,94 @@ type Props = {
   isEditing: boolean
   id: string
 }
-import { useFormContext } from 'react-hook-form'
-import { z } from 'zod'
+import { useMemo } from 'react'
+import { useFieldArray, useFormContext } from 'react-hook-form'
+
+import { InputImage } from '@/components/organisms/input-image'
+import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
+
+function useImage(path: `menuSections.${number}.menuItems.${number}`) {
+  const form = useFormContext<FormInput, undefined, FormOutput>()
+
+  const image = form.watch(`${path}.image`)
+  const uploadImage = form.watch(`${path}.uploadImage`)
+
+  const src = useMemo(() => {
+    if (uploadImage !== undefined)
+      return uploadImage ? URL.createObjectURL(uploadImage) : null
+
+    if (image) return `${import.meta.env.VITE_PUBLIC_STORAGE_URL}/${image}`
+
+    return null
+  }, [image, uploadImage])
+
+  function setUploadImage(uploadImage: File | null) {
+    // FIXME:: 元の状態に戻したとき、isDirtyがfalseになるようにしたい。
+    form.setValue(
+      `${path}.uploadImage`,
+      uploadImage !== image ? uploadImage : undefined,
+      { shouldDirty: true }
+    )
+  }
+
+  return {
+    src,
+    setUploadImage,
+  }
+}
 
 export function MenuItem({ path, onRemove, isEditing, id }: Props) {
-  const { control } = useFormContext<z.infer<typeof formSchema>>()
+  const form = useFormContext<FormInput, undefined, FormOutput>()
+  const { control } = form
 
   const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id })
+    fields: menuItemGroups,
+    // append,
+    // remove,
+  } = useFieldArray({
+    control,
+    name: `${path}.menuItemGroups`,
+  })
+
+  const { listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition: transition || undefined,
   }
 
+  const { src, setUploadImage } = useImage(path)
+
+  function handleChangeImage(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    if (file) {
+      setUploadImage(file)
+    }
+  }
+
+  function handleRemoveImage() {
+    setUploadImage(null)
+  }
+
   return (
     <div
       ref={setNodeRef}
-      className={
-        'relative flex flex-col gap-y-2 bg-white ' +
-        (isDragging ? 'opacity-25' : '')
-      }
+      className={cn(
+        'relative flex flex-col gap-y-2 bg-white ',
+        isDragging && 'opacity-25'
+      )}
       style={style}
-      {...attributes}
     >
       {isEditing && (
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Grip className="absolute left-1 top-1 z-10" {...listeners} />
+              <Grip
+                className="absolute left-1 top-1 z-10 cursor-pointer"
+                {...listeners}
+              />
             </TooltipTrigger>
             <TooltipContent className="bg-primary">
               <p className="text-white">
@@ -69,13 +124,14 @@ export function MenuItem({ path, onRemove, isEditing, id }: Props) {
           </Tooltip>
         </TooltipProvider>
       )}
-      <AspectRatio className="bg-muted" ratio={4 / 3}>
-        <img
-          className="size-full object-cover"
-          alt="menu item image"
-          src="http://localhost:5173/noimage.png"
-        />
-      </AspectRatio>
+      <InputImage
+        alt="menu item"
+        ratio={4 / 3}
+        readOnly={!isEditing}
+        src={src}
+        onChange={handleChangeImage}
+        onRemove={handleRemoveImage}
+      />
       <FormField
         control={control}
         name={`${path}.name`}
@@ -109,6 +165,11 @@ export function MenuItem({ path, onRemove, isEditing, id }: Props) {
           </FormItem>
         )}
       />
+      <div>
+        {menuItemGroups.map((menuItemGroup) => (
+          <Badge key={menuItemGroup.id}>{menuItemGroup.name}</Badge>
+        ))}
+      </div>
       <div className="flex justify-end gap-2">
         {isEditing && <Trash2 onClick={onRemove} />}
       </div>

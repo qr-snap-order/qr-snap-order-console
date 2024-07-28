@@ -25,3 +25,6 @@ dist-ssr
 
 # for CodeGen
 src/__generated__
+
+# for Storybook
+*storybook.log
