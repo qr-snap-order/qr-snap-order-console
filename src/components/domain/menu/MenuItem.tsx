@@ -28,10 +28,11 @@ type Props = {
   id: string
 }
 import { useMemo } from 'react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
 import { InputImage } from '@/components/organisms/input-image'
-import { Badge } from '@/components/ui/badge'
+import { MultipleSelect } from '@/components/organisms/multiple-select'
+import { useMenuItemGroups } from '@/hooks/menu/useMenuItemGroups'
 import { cn } from '@/lib/utils'
 
 function useImage(path: `menuSections.${number}.menuItems.${number}`) {
@@ -69,13 +70,8 @@ export function MenuItem({ path, onRemove, isEditing, id }: Props) {
   const { control } = form
 
   const {
-    fields: menuItemGroups,
-    // append,
-    // remove,
-  } = useFieldArray({
-    control,
-    name: `${path}.menuItemGroups`,
-  })
+    data: { menuItemGroups },
+  } = useMenuItemGroups()
 
   const { listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id })
@@ -165,11 +161,24 @@ export function MenuItem({ path, onRemove, isEditing, id }: Props) {
           </FormItem>
         )}
       />
-      <div>
-        {menuItemGroups.map((menuItemGroup) => (
-          <Badge key={menuItemGroup.id}>{menuItemGroup.name}</Badge>
-        ))}
-      </div>
+      <FormField
+        control={control}
+        name={`${path}.menuItemGroups`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>groups</FormLabel>
+            <FormControl>
+              <MultipleSelect
+                options={menuItemGroups}
+                readOnly={!isEditing}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       <div className="flex justify-end gap-2">
         {isEditing && <Trash2 onClick={onRemove} />}
       </div>

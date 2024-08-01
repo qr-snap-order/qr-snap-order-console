@@ -14,7 +14,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 import {
   type FormInput,
   type FormOutput,
-} from '@/components/organisms/menu/formSchema'
+} from '@/components/domain/menu/formSchema'
 import { Button } from '@/components/ui/button'
 
 import { MenuSectionListItemEdit } from './MenuSectionListItemEdit'
