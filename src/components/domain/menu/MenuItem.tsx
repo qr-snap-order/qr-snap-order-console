@@ -27,43 +27,12 @@ type Props = {
   isEditing: boolean
   id: string
 }
-import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { InputImage } from '@/components/organisms/input-image'
 import { MultipleSelect } from '@/components/organisms/multiple-select'
 import { useMenuItemGroups } from '@/hooks/menu/useMenuItemGroups'
 import { cn } from '@/lib/utils'
-
-function useImage(path: `menuSections.${number}.menuItems.${number}`) {
-  const form = useFormContext<FormInput, undefined, FormOutput>()
-
-  const image = form.watch(`${path}.image`)
-  const uploadImage = form.watch(`${path}.uploadImage`)
-
-  const src = useMemo(() => {
-    if (uploadImage !== undefined)
-      return uploadImage ? URL.createObjectURL(uploadImage) : null
-
-    if (image) return `${import.meta.env.VITE_PUBLIC_STORAGE_URL}/${image}`
-
-    return null
-  }, [image, uploadImage])
-
-  function setUploadImage(uploadImage: File | null) {
-    // FIXME:: 元の状態に戻したとき、isDirtyがfalseになるようにしたい。
-    form.setValue(
-      `${path}.uploadImage`,
-      uploadImage !== image ? uploadImage : undefined,
-      { shouldDirty: true }
-    )
-  }
-
-  return {
-    src,
-    setUploadImage,
-  }
-}
 
 export function MenuItem({ path, onRemove, isEditing, id }: Props) {
   const form = useFormContext<FormInput, undefined, FormOutput>()
@@ -79,19 +48,6 @@ export function MenuItem({ path, onRemove, isEditing, id }: Props) {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition: transition || undefined,
-  }
-
-  const { src, setUploadImage } = useImage(path)
-
-  function handleChangeImage(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
-    if (file) {
-      setUploadImage(file)
-    }
-  }
-
-  function handleRemoveImage() {
-    setUploadImage(null)
   }
 
   return (
@@ -120,13 +76,23 @@ export function MenuItem({ path, onRemove, isEditing, id }: Props) {
           </Tooltip>
         </TooltipProvider>
       )}
-      <InputImage
-        alt="menu item"
-        ratio={4 / 3}
-        readOnly={!isEditing}
-        src={src}
-        onChange={handleChangeImage}
-        onRemove={handleRemoveImage}
+      <FormField
+        control={control}
+        name={`${path}.image`}
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <InputImage
+                alt="menu item"
+                ratio={4 / 3}
+                readOnly={!isEditing}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
       />
       <FormField
         control={control}

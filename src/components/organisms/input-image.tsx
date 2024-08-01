@@ -1,5 +1,5 @@
 import { ImageOff } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
 import { AspectRatio } from '@/components/ui/aspect-ratio'
@@ -39,25 +39,34 @@ function isFileAccepted(file: File, accept: string) {
 }
 
 type InputImageProps = {
-  src?: null | string
+  value: File | null | string
   alt: string
   accept?: string
   ratio: number
   readOnly: boolean
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
-  onRemove?: () => void
+  onChange?: (value: File | null) => void
 }
 export function InputImage({
-  src,
+  value,
   alt,
   accept,
   ratio,
   readOnly,
   onChange,
-  onRemove,
 }: InputImageProps) {
   const [isDragOver, setIsDragOver] = useState(false)
   const uploadImageRef = useRef<HTMLInputElement>(null)
+
+  const src = useMemo(
+    function () {
+      if (value instanceof File) return URL.createObjectURL(value)
+
+      if (typeof value === 'string') return value
+
+      return import.meta.env.VITE_PUBLIC_NOIMAGE
+    },
+    [value]
+  )
 
   function handleClickImage() {
     uploadImageRef.current?.click()
@@ -80,7 +89,10 @@ export function InputImage({
     setIsDragOver(false)
   }
   function handleChangeImage(event: React.ChangeEvent<HTMLInputElement>) {
-    onChange && onChange(event)
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    onChange && onChange(file)
   }
 
   function handleDropImage(event: React.DragEvent<HTMLImageElement>) {
@@ -112,7 +124,7 @@ export function InputImage({
   }
 
   function handleRemoveImage() {
-    onRemove && onRemove()
+    onChange && onChange(null)
   }
 
   return (
@@ -124,14 +136,14 @@ export function InputImage({
           isDragOver && 'opacity-50'
         )}
         alt={alt}
-        src={src || import.meta.env.VITE_PUBLIC_NOIMAGE}
+        src={src}
         onClick={handleClickImage}
         onDragEnter={handleDragEnterImage}
         onDragLeave={handleDragLeaveImage}
         onDragOver={handleDragOverImage}
         onDrop={handleDropImage}
       />
-      {readOnly || !src || (
+      {readOnly || !value || (
         <ImageOff
           className="absolute right-1 top-1 cursor-pointer"
           onClick={handleRemoveImage}

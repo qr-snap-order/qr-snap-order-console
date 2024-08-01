@@ -16,7 +16,7 @@ const meta = {
   tags: ['autodocs'],
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
-    src: {
+    value: {
       control: 'text',
     },
     alt: {
@@ -33,7 +33,7 @@ const meta = {
     },
   },
   args: {
-    src: 'sample.jpg',
+    value: 'sample.jpg',
     accept: 'image/*',
     ratio: 4 / 3,
     readOnly: false,

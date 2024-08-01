@@ -13,10 +13,8 @@ export const formSchema = z.object({
           name: z.string().min(1).max(255),
           price: z.coerce.number().min(0).max(99999999),
           image: z
-            .string()
-            .nullable()
-            .transform(() => undefined),
-          uploadImage: z.custom<File>().nullish(),
+            .custom<File | null | string>()
+            .transform((v) => (typeof v === 'string' ? undefined : v)),
           menuItemGroups: z.array(
             z
               .object({
