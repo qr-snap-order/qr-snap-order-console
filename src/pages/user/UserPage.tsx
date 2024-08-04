@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 
+import User from '@/components/domain/user/User'
 import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
-import { Button } from '@/components/ui/button'
 import { useUser } from '@/hooks/user/useUser'
 
 export default function UserPage() {
@@ -20,13 +20,8 @@ export default function UserPage() {
       <div className="mb-4">
         <BreadcrumbNav links={breadcrumb} />
       </div>
-      <div className="flex justify-end gap-2">
-        <Button>Edit</Button>
-        <Button>Delete</Button>
-      </div>
       <div>
-        <p>{data.user.id}</p>
-        <p>{data.user.name}</p>
+        <User user={data.user} />
       </div>
     </div>
   )

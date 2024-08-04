@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 
+import Shop from '@/components/domain/shop/Shop'
 import { BreadcrumbNav } from '@/components/organisms/breadcrubnav'
-import { Button } from '@/components/ui/button'
 import { useShop } from '@/hooks/shop/useShop'
 
 export default function ShopPage() {
@@ -20,13 +20,8 @@ export default function ShopPage() {
       <div className="mb-4">
         <BreadcrumbNav links={breadcrumb} />
       </div>
-      <div className="flex justify-end gap-2">
-        <Button>Edit</Button>
-        <Button>Delete</Button>
-      </div>
       <div>
-        <p>{data.shop.id}</p>
-        <p>{data.shop.name}</p>
+        <Shop shop={data.shop} />
       </div>
     </div>
   )
