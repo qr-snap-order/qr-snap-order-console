@@ -1,9 +1,9 @@
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -24,7 +24,7 @@ export function BreadcrumbNav(props: Props) {
           <React.Fragment key={index}>
             <BreadcrumbItem>
               {link.href ? (
-                <BreadcrumbLink href={link.href}>{link.label}</BreadcrumbLink>
+                <Link to={link.href}>{link.label}</Link>
               ) : (
                 <BreadcrumbPage>{link.label}</BreadcrumbPage>
               )}
