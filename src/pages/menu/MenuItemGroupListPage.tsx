@@ -17,7 +17,7 @@ import { useMenuItemGroups } from '@/hooks/menu/useMenuItemGroups'
 import { useFilter } from '@/hooks/useFilter'
 
 export default function MenuItemGroupListPage() {
-  const breadcrumb = [{ label: 'Menu', href: '/menu' }, { label: 'Grouping' }]
+  const breadcrumb = [{ label: 'Menu', href: '/menu' }, { label: 'Groups' }]
 
   const { data } = useMenuItemGroups()
 

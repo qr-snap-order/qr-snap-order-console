@@ -86,7 +86,7 @@ export default function Menu() {
               </Button>
               <Link to="/menu-item-groups">
                 <Button type="button" variant="outline">
-                  Grouping
+                  Groups
                 </Button>
               </Link>
             </>

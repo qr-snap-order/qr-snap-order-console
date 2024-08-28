@@ -14,7 +14,7 @@ export default function MenuItemGroupPage() {
 
   const breadcrumb = [
     { label: 'Menu', href: '/menu' },
-    { label: 'Grouping', href: '/menu-item-groups' },
+    { label: 'Groups', href: '/menu-item-groups' },
     { label: data.menuItemGroup.name },
   ]
 
